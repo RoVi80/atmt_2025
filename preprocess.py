@@ -18,6 +18,11 @@ def get_args():
     parser.add_argument("--src-model", type=str, default=None, help="Path to the Source Language SentencePiece tokenization model. If none, creates a tokenization model from the training-split.")
     parser.add_argument("--tgt-model", type=str, default=None, help="Path to the Target Language SentencePiece tokenization model. If none, creates a tokenization model from the training-split.")
     parser.add_argument("--force-train", action="store_true", help="Force training even if a model already exists.")
+
+    # NEW: Joint BPE option
+    parser.add_argument("--joint-bpe", action="store_true", help="Train a single joint BPE tokenizer for both source and target languages.")
+    parser.add_argument("--joint-vocab-size", type=int, default=16000, help="Vocabulary size for joint BPE tokenizer.")
+
     # File prefixes (optional)
     parser.add_argument('--train-prefix', default=None, metavar='FP', help='raw train file prefix (without .lang extension)')
     parser.add_argument('--tiny-train-prefix', default=None, metavar='FP', help='raw tiny train file prefix (without .lang extension)')
@@ -75,15 +80,70 @@ if __name__ == "__main__":
     # parse arguments from the command line
     args = get_args()
 
-    # define paths for tokenization models
-    # if no model path is given, create a model path in the model directory with the format LANG-bpe-VOCABSIZE.model
-    tgt_tokenizer_model = args.tgt_model if args.tgt_model \
-        else os.path.join(args.model_dir, f"{args.target_lang}-bpe-{args.tgt_vocab_size}.model")
-    src_tokenizer_model = args.src_model if args.src_model \
-        else os.path.join(args.model_dir, f"{args.source_lang}-bpe-{args.src_vocab_size}.model")
-    
+
     os.makedirs(args.dest_dir, exist_ok=True)
 
+    # NEW: Joint BPE logic
+    if args.joint_bpe:
+        logging.info("Using Joint BPE tokenizer for both source and target languages")
+        
+        # Define joint tokenizer model path
+        joint_tokenizer_model = os.path.join(
+            args.model_dir, 
+            f"{args.source_lang}-{args.target_lang}-joint-bpe-{args.joint_vocab_size}.model"
+        )
+        
+        # Create joint processor
+        joint_processor = BPETokenizer(
+            language=f"{args.source_lang}-{args.target_lang}-joint",
+            vocab_size=args.joint_vocab_size,
+            eos=args.eos_token,
+            bos=args.bos_token,
+            pad=args.pad_token,
+            unk=args.unk_token
+        )
+        
+        # Train or load joint model
+        if (not os.path.exists(joint_tokenizer_model)) or (args.force_train):
+            if args.train_prefix is None:
+                raise ValueError("No training data provided for training the joint tokenizer model.")
+            
+            # Create temporary combined training file
+            temp_combined_file = os.path.join(args.model_dir, "temp_combined_train.txt")
+            src_train_file = os.path.join(args.raw_data, f"{args.train_prefix}.{args.source_lang}")
+            tgt_train_file = os.path.join(args.raw_data, f"{args.train_prefix}.{args.target_lang}")
+            
+            logging.info(f"Combining training data from {src_train_file} and {tgt_train_file}")
+            with open(temp_combined_file, 'w', encoding='utf-8') as outf:
+                with open(src_train_file, 'r', encoding='utf-8') as inf:
+                    outf.write(inf.read())
+                with open(tgt_train_file, 'r', encoding='utf-8') as inf:
+                    outf.write(inf.read())
+            
+            # Train joint tokenizer
+            joint_processor.train_tokenizer(training_data=temp_combined_file, model_dir=args.model_dir)
+            logging.info(f'Trained Joint SentencePiece model for {args.source_lang}-{args.target_lang} with {joint_processor.vocab_size} words')
+            
+            # Clean up temporary file
+            os.remove(temp_combined_file)
+        else:
+            joint_processor.load(model_path=joint_tokenizer_model)
+            logging.info(f'Loaded Joint SentencePiece model from {joint_tokenizer_model}')
+        
+        joint_processor.save_vocab(args.model_dir)
+        
+        # Use the same processor for both source and target
+        src_processor = joint_processor
+        tgt_processor = joint_processor
+        
+    else:
+        # ORIGINAL CODE: Separate tokenizers
+        # define paths for tokenization models
+        tgt_tokenizer_model = args.tgt_model if args.tgt_model \
+            else os.path.join(args.model_dir, f"{args.target_lang}-bpe-{args.tgt_vocab_size}.model")
+        src_tokenizer_model = args.src_model if args.src_model \
+            else os.path.join(args.model_dir, f"{args.source_lang}-bpe-{args.src_vocab_size}.model")
+        
     # ----------------------------
     # SOURCE LANGUAGE:
     src_processor = BPETokenizer(
