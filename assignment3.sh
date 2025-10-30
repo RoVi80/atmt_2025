@@ -37,7 +37,7 @@ python train.py \
     --batch-size 64 \
     --arch transformer \
     --max-epoch 7 \
-    --log-file cz-en/logs/train_joint_bpe.log \
+    --log-file cz-en/logs_joint_bpe/train_joint_bpe.log \
     --save-dir cz-en/checkpoints_joint_bpe/ \
     --ignore-checkpoints \
     --encoder-dropout 0.1 \
