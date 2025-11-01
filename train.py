@@ -200,6 +200,7 @@ def main(args):
     # Final evaluation on the test set
     test_dataset = load_data(split='test')
     logging.info('Loading the best model for final evaluation on the test set')
+    args.restore_file = 'checkpoint_best.pt' 
     utils.load_checkpoint(args, model, optimizer)
 
     # Evaluate the model on the test set
