@@ -31,28 +31,28 @@ mkdir -p cz-en/checkpoints_joint_bpe_v2
 #    --force-train
 
 # TRAIN WITH JOINT BPE
-#python train.py \
-#    --cuda \
-#    --data cz-en/data/prepared_joint_bpe/ \
-#    --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
-#    --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
-#    --source-lang cz \
-#    --target-lang en \
-#    --batch-size 64 \
-#    --arch transformer \
-#    --max-epoch 7 \
-#    --log-file cz-en/logs_joint_bpe_v2/train_joint_bpe.log \
-#    --save-dir cz-en/checkpoints_joint_bpe_v2/ \
-#    --ignore-checkpoints \
-#    --encoder-dropout 0.1 \
-#    --decoder-dropout 0.1 \
-#    --dim-embedding 256 \
-#    --attention-heads 4 \
-#    --dim-feedforward-encoder 1024 \
-#    --dim-feedforward-decoder 1024 \
-#    --max-seq-len 300 \
-#    --n-encoder-layers 3 \
-#    --n-decoder-layers 3
+python train.py \
+    --cuda \
+    --data cz-en/data/prepared_joint_bpe/ \
+    --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
+    --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
+    --source-lang cz \
+    --target-lang en \
+    --batch-size 64 \
+    --arch transformer \
+    --max-epoch 7 \
+    --log-file cz-en/logs_joint_bpe_v2/train_joint_bpe.log \
+    --save-dir cz-en/checkpoints_joint_bpe_v2/ \
+    --ignore-checkpoints \
+    --encoder-dropout 0.1 \
+    --decoder-dropout 0.1 \
+    --dim-embedding 256 \
+    --attention-heads 4 \
+    --dim-feedforward-encoder 1024 \
+    --dim-feedforward-decoder 1024 \
+    --max-seq-len 300 \
+    --n-encoder-layers 3 \
+    --n-decoder-layers 3
 
 # TRANSLATE
 python translate.py \
