@@ -38,7 +38,7 @@ def get_args():
     parser.add_argument('--checkpoint-path', required=True, help='path to the model file')
     parser.add_argument('--batch-size', default=1, type=int, help='maximum number of sentences in a batch')
     parser.add_argument('--output', required=True, type=str, help='path to the output file destination')
-    parser.add_argument('--max-len', default=128, type=int, help='maximum length of generated sequence')
+    parser.add_argument('--max-len', default=300, type=int, help='maximum length of generated sequence')
     
     # BLEU computation arguments
     parser.add_argument('--bleu', action='store_true', help='If set, compute BLEU score after translation')
@@ -120,11 +120,10 @@ def main(args):
     translations = []
     start_time = time.perf_counter()
 
-    make_batch = utils.make_batch_input(device=DEVICE, pad=src_tokenizer.pad_id(), max_seq_len=args.max_len)
-
+    #make_batch = utils.make_batch_input(device=DEVICE, pad=src_tokenizer.pad_id(), max_seq_len=args.max_len)  ## 
 
     #------------------------------------------
-    # Translation loop (batched)
+    # Translation loop (batched) - FIXED VERSION
     for batch in tqdm(batch_iter(src_encoded, args.batch_size)):
         with torch.no_grad():
             # Pad the batch to the same length
@@ -136,11 +135,8 @@ def main(args):
             ]
             src_tokens = torch.stack(batch_padded).to(DEVICE)
 
-            # Create a dummy target tensor (all PADs, same shape as src_tokens)
-            dummy_y = torch.full_like(src_tokens, fill_value=src_tokenizer.pad_id())
-
-            # Use make_batch to get masks (trg_in, trg_out are not used for inference)
-            src_tokens, trg_in, trg_out, src_pad_mask, trg_pad_mask = make_batch(src_tokens, dummy_y)
+            # Create source padding mask directly (no make_batch!)
+            src_pad_mask = (src_tokens == PAD).unsqueeze(1).unsqueeze(2)  # (batch, 1, 1, src_len)
 
             #-----------------------------------------
             # Decode without teacher forcing
@@ -153,9 +149,9 @@ def main(args):
                                       device=DEVICE)
             #----------------------------------------
 
-        # Remove BOS and decode each sentence
+        # Decode each sentence
         for sent in prediction:
-            translation = decode_sentence(tgt_tokenizer, sent)
+            translation = tgt_tokenizer.Decode(sent)
             translations.append(translation)
             if args.output is not None:
                 with open(args.output, 'a', encoding="utf-8") as out_file:
