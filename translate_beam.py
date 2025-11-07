@@ -45,20 +45,19 @@ def main(args):
     torch.manual_seed(args.seed)
     
     # Load checkpoint
+    print(f'Loading checkpoint from {args.checkpoint_path}...')
     state_dict = torch.load(args.checkpoint_path, map_location=lambda s, l: default_restore_location(s, 'cpu'), weights_only=False)
     
-    # Merge checkpoint args with command line args
-    checkpoint_args = state_dict['args']
-    for key in ['input', 'output', 'beam_size', 'length_penalty', 'max_len', 'bleu', 'reference']:
-        if hasattr(args, key):
-            setattr(checkpoint_args, key, getattr(args, key))
-    args = checkpoint_args
+    # Get model args from checkpoint for building the model
+    model_args = state_dict['args']
     
     # Load tokenizers
+    print('Loading tokenizers...')
     src_tokenizer = utils.load_tokenizer(args.src_tokenizer)
     tgt_tokenizer = utils.load_tokenizer(args.tgt_tokenizer)
 
     # Read input sentences
+    print(f'Reading input from {args.input}...')
     with open(args.input, encoding="utf-8") as f:
         src_lines = [line.strip() for line in f if line.strip()]
 
@@ -68,8 +67,9 @@ def main(args):
     src_encoded = [torch.tensor(src_tokenizer.Encode(line, out_type=int)) for line in src_lines]
     src_encoded = [s if len(s) <= args.max_len else s[:args.max_len] for s in src_encoded]
 
-    # Build model
-    model = models.build_model(args, src_tokenizer, tgt_tokenizer)
+    # Build model using model_args from checkpoint
+    print('Building model...')
+    model = models.build_model(model_args, src_tokenizer, tgt_tokenizer)
     if args.cuda:
         model = model.cuda()
     model.eval()
@@ -80,6 +80,7 @@ def main(args):
     PAD = src_tokenizer.pad_id()
 
     # Clear output file
+    print(f'Writing translations to {args.output}...')
     with open(args.output, 'w', encoding="utf-8") as out_file:
         out_file.write('')
 
@@ -116,11 +117,12 @@ def main(args):
             out_file.write(translation + '\n')
     
     end_time = time.perf_counter()
-    print(f'Wrote {len(translations)} lines to {args.output}')
+    print(f'\nWrote {len(translations)} lines to {args.output}')
     print(f'Translation completed in {end_time - start_time:.2f} seconds')
 
     # Compute BLEU score if requested
     if args.bleu and args.reference:
+        print(f'Computing BLEU score...')
         with open(args.reference, encoding='utf-8') as ref_file:
             references = [line.strip() for line in ref_file if line.strip()]
         
