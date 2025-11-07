@@ -12,7 +12,7 @@ from torch.serialization import default_restore_location
 import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from beam_decode import beam_decode
+from seq2seq.beam_decode import beam_decode
 from seq2seq import models, utils
 
 def get_args():
