@@ -1,6 +1,6 @@
 #!/usr/bin/bash -l
 #SBATCH --partition teaching
-#SBATCH --time=3:0:0
+#SBATCH --time=23:0:0
 #SBATCH --gpus=1
 #SBATCH --mem=16GB
 #SBATCH --output=out_beam_search.out
