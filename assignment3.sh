@@ -60,12 +60,12 @@ tail -n 5000 ~/shares/cz-en/data/raw/test.en | head -10 > ~/test_middle.en
 # TRANSLATE
 python translate.py \
     --cuda \
-    --input ~/test_small.cz \
+    --input ~/test_middle.cz \
     --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --checkpoint-path cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt \
-    --output ~/test_greedy_small.txt \
+    --output ~/test_greedy_middle.txt \
     --batch-size 1 \
     --max-len 300 \
     --bleu \
-    --reference ~/test_small.en
+    --reference ~/test_middle.en
