@@ -5,7 +5,7 @@
 #SBATCH --mem=16GB
 #SBATCH --cpus-per-task=1
 #SBATCH --gpus=1
-#SBATCH --output=out_assignment3_joint_bpe_v2.out
+#SBATCH --output=out_assignment3_joint_bpe_v2_examplegreedydeletelater.out
 
 module load gpu
 module load mamba
@@ -31,37 +31,38 @@ mkdir -p cz-en/checkpoints_joint_bpe_v2
 #    --force-train
 
 # TRAIN WITH JOINT BPE
-python train.py \
-    --cuda \
-    --data cz-en/data/prepared_joint_bpe/ \
-    --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
-    --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
-    --source-lang cz \
-    --target-lang en \
-    --batch-size 64 \
-    --arch transformer \
-    --max-epoch 7 \
-    --log-file cz-en/logs_joint_bpe_v2/train_joint_bpe.log \
-    --save-dir cz-en/checkpoints_joint_bpe_v2/ \
-    --ignore-checkpoints \
-    --encoder-dropout 0.1 \
-    --decoder-dropout 0.1 \
-    --dim-embedding 256 \
-    --attention-heads 4 \
-    --dim-feedforward-encoder 1024 \
-    --dim-feedforward-decoder 1024 \
-    --max-seq-len 300 \
-    --n-encoder-layers 3 \
-    --n-decoder-layers 3
+#python train.py \
+#    --cuda \
+#    --data cz-en/data/prepared_joint_bpe/ \
+#    --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
+#    --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
+#    --source-lang cz \
+#    --target-lang en \
+#    --batch-size 64 \
+#    --arch transformer \
+#    --max-epoch 7 \
+#    --log-file cz-en/logs_joint_bpe_v2/train_joint_bpe.log \
+#    --save-dir cz-en/checkpoints_joint_bpe_v2/ \
+#    --ignore-checkpoints \
+#    --encoder-dropout 0.1 \
+#    --decoder-dropout 0.1 \
+#    --dim-embedding 256 \
+#    --attention-heads 4 \
+#    --dim-feedforward-encoder 1024 \
+#    --dim-feedforward-decoder 1024 \
+#    --max-seq-len 300 \
+#    --n-encoder-layers 3 \
+#    --n-decoder-layers 3
 
 # TRANSLATE
 python translate.py \
     --cuda \
-    --input ~/shares/cz-en/data/raw/test.cz \
+    --input ~/test_small.cz \
     --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --checkpoint-path cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt \
-    --output cz-en/output_joint_bpe.txt \
+    --output ~/test_greedy_small.txt \
+    --batch-size 1 \
     --max-len 300 \
     --bleu \
-    --reference ~/shares/cz-en/data/raw/test.en
+    --reference ~/test_small.en
