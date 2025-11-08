@@ -36,15 +36,14 @@ def beam_decode(
     # For simplicity, only support batch_size=1 for beam search
     assert batch_size == 1, "Beam search currently only supports batch_size=1"
     
-    # ========== CORRECT FIX: Use model.encoder() ==========
+    # Encode source once
     with torch.no_grad():
         encoder_out = model.encoder(src_tokens, src_pad_mask)
         # encoder_out: [1, src_len, d_model]
     
-    # Expand encoder output for beam_size
+    # Expand encoder output and mask for beam_size
     encoder_out_expanded = encoder_out.expand(beam_size, -1, -1)  # [beam_size, src_len, d_model]
     src_pad_mask_expanded = src_pad_mask.expand(beam_size, -1, -1, -1)  # [beam_size, 1, 1, src_len]
-    # =======================================================
     
     # Initialize beams: [beam_size, 1] starting with BOS
     beams = torch.full((beam_size, 1), BOS, dtype=torch.long, device=device)
@@ -59,15 +58,14 @@ def beam_decode(
         # Create target padding mask
         trg_pad_mask = (beams == PAD).unsqueeze(1).unsqueeze(2)  # [beam_size, 1, 1, tgt_len]
         
-        # ========== CORRECT FIX: Use model.decoder() ==========
+        # Call decoder with correct argument order: (encoder_out, src_mask, trg, trg_pad_mask)
         with torch.no_grad():
-            output = model.decoder(beams, trg_pad_mask, encoder_out_expanded, src_pad_mask_expanded)
+            output = model.decoder(encoder_out_expanded, src_pad_mask_expanded, beams, trg_pad_mask)
             # output: [beam_size, tgt_len, vocab_size]
             
             # Get logits for last position
             next_token_logits = output[:, -1, :]  # [beam_size, vocab_size]
             log_probs = torch.log_softmax(next_token_logits, dim=-1)  # [beam_size, vocab_size]
-        # =======================================================
         
         # Compute scores for all possible next tokens
         vocab_size = log_probs.size(-1)
@@ -79,8 +77,8 @@ def beam_decode(
         # Flatten to [beam_size * vocab_size] to find top beam_size candidates
         candidate_scores = candidate_scores.view(-1)
         
-        # Get top beam_size candidates
-        top_scores, top_indices = torch.topk(candidate_scores, beam_size * 2)  # Get extra for finished beams
+        # Get top beam_size candidates (get extra for finished beams)
+        top_scores, top_indices = torch.topk(candidate_scores, min(beam_size * 2, candidate_scores.size(0)))
         
         # Convert flat indices back to (beam_idx, token_idx)
         beam_indices = top_indices // vocab_size
