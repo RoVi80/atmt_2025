@@ -14,6 +14,7 @@ def beam_decode(
 ):
     """
     Beam search decoding for Transformer models.
+    Uses the same calling pattern as the working greedy decode.
     
     Args:
         model: Trained seq2seq model
@@ -36,13 +37,8 @@ def beam_decode(
     # For simplicity, only support batch_size=1 for beam search
     assert batch_size == 1, "Beam search currently only supports batch_size=1"
     
-    # Encode source once
-    with torch.no_grad():
-        encoder_out = model.encoder(src_tokens, src_pad_mask)
-        # encoder_out: [1, src_len, d_model]
-    
-    # Expand encoder output and mask for beam_size
-    encoder_out_expanded = encoder_out.expand(beam_size, -1, -1)  # [beam_size, src_len, d_model]
+    # Expand source tokens and mask for beam_size
+    src_tokens_expanded = src_tokens.expand(beam_size, -1)  # [beam_size, src_len]
     src_pad_mask_expanded = src_pad_mask.expand(beam_size, -1, -1, -1)  # [beam_size, 1, 1, src_len]
     
     # Initialize beams: [beam_size, 1] starting with BOS
@@ -58,9 +54,9 @@ def beam_decode(
         # Create target padding mask
         trg_pad_mask = (beams == PAD).unsqueeze(1).unsqueeze(2)  # [beam_size, 1, 1, tgt_len]
         
-        # Call decoder with correct argument order: (encoder_out, src_mask, trg, trg_pad_mask)
+        # Call model() just like greedy decode does - full forward pass
         with torch.no_grad():
-            output = model.decoder(encoder_out_expanded, src_pad_mask_expanded, beams, trg_pad_mask)
+            output = model(src_tokens_expanded, src_pad_mask_expanded, beams, trg_pad_mask)
             # output: [beam_size, tgt_len, vocab_size]
             
             # Get logits for last position
@@ -134,16 +130,12 @@ def beam_decode(
         best_idx = beam_scores.argmax().item()
         best_beam = beams[best_idx]
     
-    # Remove BOS and PAD, keep up to EOS
-    best_beam = best_beam[1:]  # Remove BOS
-    best_beam = best_beam.tolist()
+    # Remove BOS and process like greedy decode does
+    best_beam = best_beam[1:].tolist()  # Remove BOS
     
-    # Remove padding and everything after EOS
+    # Remove everything after EOS (including EOS)
     if EOS in best_beam:
         eos_idx = best_beam.index(EOS)
-        best_beam = best_beam[:eos_idx]  # Don't include EOS
-    
-    # Remove PAD tokens
-    best_beam = [token for token in best_beam if token != PAD]
+        best_beam = best_beam[:eos_idx + 1]
     
     return [best_beam]  # Return as list for batch compatibility
