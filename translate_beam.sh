@@ -9,14 +9,19 @@ module load gpu
 module load mamba
 source activate atmt
 
+# Take just 10 sentences for testing
+head -10 ~/shares/cz-en/data/raw/test.cz > ~/test_small.cz
+head -10 ~/shares/cz-en/data/raw/test.en > ~/test_small.en
+
+# Run beam search on small sample
 python translate_beam.py \
     --cuda \
-    --input ~/shares/cz-en/data/raw/test.cz \
+    --input ~/test_small.cz \
     --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --checkpoint-path cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt \
-    --output cz-en/output_beam5.txt \
+    --output ~/test_beam_small.txt \
     --beam-size 5 \
     --max-len 300 \
     --bleu \
-    --reference ~/shares/cz-en/data/raw/test.en
+    --reference ~/test_small.en
