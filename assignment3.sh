@@ -54,6 +54,9 @@ mkdir -p cz-en/checkpoints_joint_bpe_v2
 #    --n-encoder-layers 3 \
 #    --n-decoder-layers 3
 
+tail -n 5000 ~/shares/cz-en/data/raw/test.cz | head -10 > ~/test_middle.cz
+tail -n 5000 ~/shares/cz-en/data/raw/test.en | head -10 > ~/test_middle.en
+
 # TRANSLATE
 python translate.py \
     --cuda \
