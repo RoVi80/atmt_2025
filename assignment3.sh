@@ -5,7 +5,7 @@
 #SBATCH --mem=16GB
 #SBATCH --cpus-per-task=1
 #SBATCH --gpus=1
-#SBATCH --output=out_assignment3_joint_bpe_v2_examplegreedydeletelater.out
+#SBATCH --output=out_assignment3_joint_bpe_v2_translation.out
 
 module load gpu
 module load mamba
@@ -54,18 +54,16 @@ mkdir -p cz-en/checkpoints_joint_bpe_v2
 #    --n-encoder-layers 3 \
 #    --n-decoder-layers 3
 
-tail -n 5000 ~/shares/cz-en/data/raw/test.cz | head -10 > ~/test_middle.cz
-tail -n 5000 ~/shares/cz-en/data/raw/test.en | head -10 > ~/test_middle.en
 
 # TRANSLATE
 python translate.py \
     --cuda \
-    --input ~/test_middle.cz \
+    --input ~/shares/cz-en/data/raw/test.cz \
     --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model \
     --checkpoint-path cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt \
-    --output ~/test_greedy_middle.txt \
-    --batch-size 1 \
+    --output cz-en/output_joint_bpe.txt \
     --max-len 300 \
     --bleu \
-    --reference ~/test_middle.en
+    --reference ~/shares/cz-en/data/raw/test.en
+
