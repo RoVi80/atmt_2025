@@ -36,15 +36,15 @@ def beam_decode(
     # For simplicity, only support batch_size=1 for beam search
     assert batch_size == 1, "Beam search currently only supports batch_size=1"
     
-    # ========== KEY FIX: Encode source ONCE before the loop ==========
+    # ========== CORRECT FIX: Use model.encoder() ==========
     with torch.no_grad():
-        encoder_out = model.encode(src_tokens, src_pad_mask)
+        encoder_out = model.encoder(src_tokens, src_pad_mask)
         # encoder_out: [1, src_len, d_model]
     
     # Expand encoder output for beam_size
     encoder_out_expanded = encoder_out.expand(beam_size, -1, -1)  # [beam_size, src_len, d_model]
     src_pad_mask_expanded = src_pad_mask.expand(beam_size, -1, -1, -1)  # [beam_size, 1, 1, src_len]
-    # ==================================================================
+    # =======================================================
     
     # Initialize beams: [beam_size, 1] starting with BOS
     beams = torch.full((beam_size, 1), BOS, dtype=torch.long, device=device)
@@ -59,15 +59,15 @@ def beam_decode(
         # Create target padding mask
         trg_pad_mask = (beams == PAD).unsqueeze(1).unsqueeze(2)  # [beam_size, 1, 1, tgt_len]
         
-        # ========== KEY FIX: Use decode() instead of full forward() ==========
+        # ========== CORRECT FIX: Use model.decoder() ==========
         with torch.no_grad():
-            output = model.decode(beams, trg_pad_mask, encoder_out_expanded, src_pad_mask_expanded)
+            output = model.decoder(beams, trg_pad_mask, encoder_out_expanded, src_pad_mask_expanded)
             # output: [beam_size, tgt_len, vocab_size]
             
             # Get logits for last position
             next_token_logits = output[:, -1, :]  # [beam_size, vocab_size]
             log_probs = torch.log_softmax(next_token_logits, dim=-1)  # [beam_size, vocab_size]
-        # =====================================================================
+        # =======================================================
         
         # Compute scores for all possible next tokens
         vocab_size = log_probs.size(-1)
