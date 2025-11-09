@@ -133,9 +133,9 @@ def beam_decode(
     # Remove BOS and process like greedy decode does
     best_beam = best_beam[1:].tolist()  # Remove BOS
     
-    # Remove everything after EOS (including EOS)
+    # Remove everything after EOS (EXCLUDE EOS - FIXED)
     if EOS in best_beam:
         eos_idx = best_beam.index(EOS)
-        best_beam = best_beam[:eos_idx + 1]
+        best_beam = best_beam[:eos_idx]  # CHANGED: was [:eos_idx + 1], now [:eos_idx]
     
     return [best_beam]  # Return as list for batch compatibility
