@@ -40,6 +40,21 @@ def get_args():
     return parser.parse_args()
 
 
+def postprocess_ids(ids, pad, bos, eos):
+    """Remove leading BOS, truncate at first EOS, remove PADs."""
+    if isinstance(ids, torch.Tensor):
+        ids = ids.tolist()
+    # remove leading BOS if present
+    if len(ids) > 0 and ids[0] == bos:
+        ids = ids[1:]
+    # truncate at EOS (do not include EOS)
+    if eos in ids:
+        ids = ids[:ids.index(eos)]
+    # remove PAD tokens (typically trailing, but remove any)
+    ids = [i for i in ids if i != pad]
+    return ids
+
+
 def main(args):
     """ Main translation function with beam search """
     torch.manual_seed(args.seed)
@@ -63,9 +78,12 @@ def main(args):
 
     print(f"Translating {len(src_lines)} sentences with beam size {args.beam_size}...")
 
-    # Encode input sentences
-    src_encoded = [torch.tensor(src_tokenizer.Encode(line, out_type=int)) for line in src_lines]
-    src_encoded = [s if len(s) <= args.max_len else s[:args.max_len] for s in src_encoded]
+    # Encode input sentences WITH add_eos=True (FIX #1)
+    src_encoded = [torch.tensor(src_tokenizer.Encode(line, out_type=int, add_eos=True)) for line in src_lines]
+    
+    # Trim to max_len
+    max_seq_len = args.max_len
+    src_encoded = [s if len(s) <= max_seq_len else s[:max_seq_len] for s in src_encoded]
 
     # Build model using model_args from checkpoint
     print('Building model...')
@@ -78,6 +96,11 @@ def main(args):
 
     DEVICE = 'cuda' if args.cuda else 'cpu'
     PAD = src_tokenizer.pad_id()
+    BOS = tgt_tokenizer.bos_id()
+    EOS = tgt_tokenizer.eos_id()
+    
+    print(f'PAD ID: {PAD}, BOS ID: {BOS}, EOS ID: {EOS}')
+    print(f'PAD token: "{src_tokenizer.IdToPiece(PAD)}", BOS token: "{tgt_tokenizer.IdToPiece(BOS)}", EOS token: "{tgt_tokenizer.IdToPiece(EOS)}"')
 
     # Clear output file
     print(f'Writing translations to {args.output}...')
@@ -108,8 +131,9 @@ def main(args):
                 length_penalty=args.length_penalty
             )
         
-        # Decode to string
-        translation = tgt_tokenizer.Decode(prediction[0])
+        # Postprocess and decode to string (FIX #2)
+        clean_ids = postprocess_ids(prediction[0], PAD, BOS, EOS)
+        translation = tgt_tokenizer.Decode(clean_ids)
         translations.append(translation)
         
         # Write to file
