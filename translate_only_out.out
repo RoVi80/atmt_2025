@@ -1,0 +1,27 @@
+
+Filesystems usage for user josvil ( uid 646215573 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/josvil                   183KB    15GB     0.0%            48    100000
+/data/josvil                    14GB   200GB     6.5%         40281          
+/scratch/josvil                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh   1.4GB    10TB     0.0%            13          
+-------------------------------------------------------------------------------------
+
+Files on /scratch may be purged after 30 days.
+See https://docs.s3it.uzh.ch/cluster/data
+
+[2025-10-09 23:42:39] COMMAND: translate.py --cuda --input /home/josvil/shares/cz-en/data/raw/test.cz --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model --checkpoint-path cz-en/checkpoints/checkpoint_best.pt --output cz-en/output/output.txt --max-len 300 --batch-size 64 --bleu --reference /home/josvil/shares/cz-en/data/raw/test.en
+[2025-10-09 23:42:39] Arguments: {'cuda': True, 'data': 'cz-en/data/prepared/', 'source_lang': 'cz', 'target_lang': 'en', 'src_tokenizer': 'cz-en/tokenizers/cz-bpe-8000.model', 'tgt_tokenizer': 'cz-en/tokenizers/en-bpe-8000.model', 'max_tokens': None, 'batch_size': 64, 'train_on_tiny': False, 'arch': 'transformer', 'max_epoch': 7, 'clip_norm': 4.0, 'lr': 0.0003, 'patience': 3, 'max_length': 300, 'log_file': 'cz-en/logs/train.log', 'save_dir': 'cz-en/checkpoints/', 'restore_file': 'checkpoint_last.pt', 'save_interval': 1, 'no_save': False, 'epoch_checkpoints': False, 'ignore_checkpoints': True, 'encoder_dropout': 0.1, 'decoder_dropout': 0.1, 'dim_embedding': 256, 'attention_heads': 4, 'dim_feedforward_encoder': 1024, 'dim_feedforward_decoder': 1024, 'max_seq_len': 300, 'n_encoder_layers': 3, 'n_decoder_layers': 3, 'encoder_embed_path': None, 'decoder_embed_path': None, 'seed': 42, 'input': '/home/josvil/shares/cz-en/data/raw/test.cz', 'checkpoint_path': 'cz-en/checkpoints/checkpoint_best.pt', 'output': 'cz-en/output/output.txt', 'max_len': 300, 'bleu': True, 'reference': '/home/josvil/shares/cz-en/data/raw/test.en'}
+[2025-10-09 23:42:39] Loaded a model from checkpoint cz-en/checkpoints/checkpoint_best.pt
+PAD ID: 3, BOS ID: 1, EOS ID: 2
+          PAD token: "<pad>", BOS token: "<s>", EOS token: "</s>"
+0it [00:00, ?it/s]1it [00:06,  6.89s/it]2it [00:11,  5.64s/it]3it [00:18,  6.02s/it]4it [00:23,  5.67s/it]5it [00:28,  5.69s/it]6it [00:34,  5.53s/it]7it [00:40,  5.72s/it]8it [00:45,  5.51s/it]9it [00:52,  5.92s/it]10it [00:57,  5.60s/it]11it [01:02,  5.62s/it]12it [01:08,  5.59s/it]13it [01:13,  5.57s/it]14it [01:19,  5.65s/it]15it [01:25,  5.70s/it]16it [01:30,  5.44s/it]17it [01:35,  5.52s/it]18it [01:41,  5.54s/it]19it [01:46,  5.32s/it]20it [01:51,  5.32s/it]21it [01:56,  5.21s/it]22it [02:01,  5.11s/it]23it [02:06,  5.01s/it]24it [02:12,  5.25s/it]25it [02:16,  5.12s/it]26it [02:21,  5.06s/it]27it [02:27,  5.30s/it]28it [02:33,  5.45s/it]29it [02:38,  5.38s/it]30it [02:43,  5.22s/it]31it [02:48,  5.16s/it]32it [02:58,  6.62s/it]33it [03:03,  6.08s/it]34it [03:08,  5.77s/it]35it [03:13,  5.47s/it]36it [03:18,  5.26s/it]37it [03:23,  5.26s/it]38it [03:29,  5.66s/it]39it [03:35,  5.54s/it]40it [03:41,  5.92s/it]41it [03:47,  5.67s/it]42it [03:52,  5.53s/it]43it [03:57,  5.49s/it]44it [04:02,  5.31s/it]45it [04:07,  5.28s/it]46it [04:12,  5.16s/it]47it [04:17,  5.20s/it]48it [04:23,  5.39s/it]49it [04:28,  5.24s/it]50it [04:34,  5.36s/it]51it [04:39,  5.37s/it]52it [04:45,  5.47s/it]53it [04:51,  5.52s/it]54it [04:56,  5.43s/it]55it [05:01,  5.48s/it]56it [05:06,  5.25s/it]57it [05:11,  5.24s/it]58it [05:17,  5.43s/it]59it [05:22,  5.27s/it]60it [05:28,  5.39s/it]61it [05:33,  5.23s/it]62it [05:38,  5.15s/it]63it [05:43,  5.11s/it]64it [05:48,  5.24s/it]65it [05:56,  6.16s/it]66it [06:03,  6.22s/it]67it [06:08,  5.82s/it]68it [06:14,  6.10s/it]69it [06:19,  5.73s/it]70it [06:25,  5.70s/it]71it [06:31,  5.74s/it]72it [06:36,  5.68s/it]73it [06:42,  5.63s/it]74it [06:47,  5.56s/it]75it [06:52,  5.34s/it]76it [06:58,  5.44s/it]77it [07:03,  5.46s/it]78it [07:08,  5.32s/it]79it [07:10,  4.42s/it]79it [07:10,  5.46s/it]
+[2025-10-09 23:49:50] Wrote 5000 lines to cz-en/output/output.txt
+[2025-10-09 23:49:50] Translation completed in 431.02 seconds
+[2025-10-09 23:49:53] That's 100 lines that end in a tokenized period ('.')
+[2025-10-09 23:49:53] It looks like you forgot to detokenize your test data, which may hurt your score.
+[2025-10-09 23:49:53] If you insist your data is detokenized, or don't care, you can suppress this message with the `force` parameter.
+BLEU score: 0.86

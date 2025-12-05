@@ -1,0 +1,30 @@
+
+Filesystems usage for user josvil ( uid 646215573 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/josvil                   255KB    15GB     0.0%            57    100000
+/data/josvil                    17GB   200GB     8.1%         51657          
+/scratch/josvil                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh    27GB    10TB     0.3%          2361          
+-------------------------------------------------------------------------------------
+
+Files on /scratch may be purged after 30 days.
+See https://docs.s3it.uzh.ch/cluster/data
+
+Loading checkpoint from cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt...
+Loading tokenizers...
+Reading input from /home/josvil/test_small.cz...
+Translating 10 sentences with beam size 5...
+Building model...
+Loaded model from checkpoint cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt
+PAD ID: 3, BOS ID: 1, EOS ID: 2
+PAD token: "<pad>", BOS token: "<s>", EOS token: "</s>"
+Writing translations to /home/josvil/test_beam_small.txt...
+Translating:   0%|          | 0/10 [00:00<?, ?it/s]Translating:  10%|█         | 1/10 [00:02<00:25,  2.86s/it]Translating:  20%|██        | 2/10 [00:05<00:20,  2.59s/it]Translating:  30%|███       | 3/10 [00:07<00:17,  2.51s/it]Translating:  40%|████      | 4/10 [00:10<00:14,  2.46s/it]Translating:  50%|█████     | 5/10 [00:12<00:12,  2.44s/it]Translating:  60%|██████    | 6/10 [00:14<00:09,  2.44s/it]Translating:  70%|███████   | 7/10 [00:17<00:07,  2.46s/it]Translating:  80%|████████  | 8/10 [00:19<00:04,  2.45s/it]Translating:  90%|█████████ | 9/10 [00:22<00:02,  2.42s/it]Translating: 100%|██████████| 10/10 [00:24<00:00,  2.42s/it]Translating: 100%|██████████| 10/10 [00:24<00:00,  2.46s/it]
+
+Wrote 10 lines to /home/josvil/test_beam_small.txt
+Translation completed in 24.78 seconds
+Computing BLEU score...
+BLEU score: 8.58

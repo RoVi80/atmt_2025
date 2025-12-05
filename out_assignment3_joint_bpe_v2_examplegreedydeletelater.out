@@ -1,0 +1,25 @@
+
+Filesystems usage for user josvil ( uid 646215573 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/josvil                   254KB    15GB     0.0%            57    100000
+/data/josvil                    17GB   200GB     8.1%         51607          
+/scratch/josvil                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh    27GB    10TB     0.3%          2361          
+-------------------------------------------------------------------------------------
+
+Files on /scratch may be purged after 30 days.
+See https://docs.s3it.uzh.ch/cluster/data
+
+[2025-11-08 23:27:17] COMMAND: translate.py --cuda --input /home/josvil/test_middle.cz --src-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model --tgt-tokenizer cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model --checkpoint-path cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt --output /home/josvil/test_greedy_middle.txt --batch-size 1 --max-len 300 --bleu --reference /home/josvil/test_middle.en
+[2025-11-08 23:27:17] Arguments: {'cuda': True, 'data': 'cz-en/data/prepared_joint_bpe/', 'source_lang': 'cz', 'target_lang': 'en', 'src_tokenizer': 'cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model', 'tgt_tokenizer': 'cz-en/tokenizers_joint_bpe/cz-en-joint-bpe-16000.model', 'max_tokens': None, 'batch_size': 1, 'train_on_tiny': False, 'arch': 'transformer', 'max_epoch': 7, 'clip_norm': 4.0, 'lr': 0.0003, 'patience': 3, 'max_length': 300, 'log_file': 'cz-en/logs_joint_bpe_v2/train_joint_bpe.log', 'save_dir': 'cz-en/checkpoints_joint_bpe_v2/', 'restore_file': 'checkpoint_last.pt', 'save_interval': 1, 'no_save': False, 'epoch_checkpoints': False, 'ignore_checkpoints': True, 'encoder_dropout': 0.1, 'decoder_dropout': 0.1, 'dim_embedding': 256, 'attention_heads': 4, 'dim_feedforward_encoder': 1024, 'dim_feedforward_decoder': 1024, 'max_seq_len': 300, 'n_encoder_layers': 3, 'n_decoder_layers': 3, 'encoder_embed_path': None, 'decoder_embed_path': None, 'seed': 42, 'input': '/home/josvil/test_middle.cz', 'checkpoint_path': 'cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt', 'output': '/home/josvil/test_greedy_middle.txt', 'max_len': 300, 'bleu': True, 'reference': '/home/josvil/test_middle.en'}
+[2025-11-08 23:27:17] Loaded a model from checkpoint cz-en/checkpoints_joint_bpe_v2/checkpoint_best.pt
+PAD ID: 3, BOS ID: 1, EOS ID: 2
+          PAD token: "<pad>", BOS token: "<s>", EOS token: "</s>"
+0it [00:00, ?it/s]1it [00:00,  2.78it/s]2it [00:00,  4.22it/s]3it [00:00,  5.66it/s]5it [00:00,  7.11it/s]7it [00:01,  8.81it/s]8it [00:01,  8.76it/s]9it [00:01,  8.74it/s]10it [00:01,  7.69it/s]
+[2025-11-08 23:27:19] Wrote 10 lines to /home/josvil/test_greedy_middle.txt
+[2025-11-08 23:27:19] Translation completed in 1.30 seconds
+translations: ['fiers of Kwangtung?', 'ers of the horses at Sierras and stringed the dynamite into the rocks of rock?', '. I want you to turn into the wall in flour. wall.', ', your forefathers are now turning around in the grave.', ", you're pushing too much on me. You're pushing me too much.", '. I am not a slave. I am not a slave.', ', I acted as a security guard.', 'fire with a chauffeur. I finished with a chauffeur.', 'ing a house of less money, I send a house. I send a little money.', ', I have no  ⁇ as to eat.']
+BLEU score: 4.33
