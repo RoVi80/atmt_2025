@@ -13,7 +13,7 @@ from torch.serialization import default_restore_location
 import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from seq2seq.decode import beam_search_decode, decode
+from seq2seq.decode import beam_search_decode_relative as beam_search_decode, decode
 from seq2seq.data.tokenizer import BPETokenizer
 from seq2seq import models, utils
 from seq2seq.data.dataset import Seq2SeqDataset, BatchSampler
