@@ -1,0 +1,54 @@
+
+Filesystems usage for user josvil ( uid 646215573 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/josvil                    17GB   373GB     4.4%        51,874          
+/scratch/josvil                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh    29GB    10TB     0.3%         3,273          
+-------------------------------------------------------------------------------------
+
+!! Please note: the scratch filesystem is intended only for temporary storage.
+   Files in /scratch/josvil that have not been accessed in more than 30 days
+   may be automatically deleted.
+
+Lmod has detected the following error: The following module(s) are unknown:
+"gpu"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "gpu"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+Lmod has detected the following error: The following module(s) are unknown:
+"mamba"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "mamba"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+/var/spool/slurmd/job24779/slurm_script: line 12: activate: No such file or directory
+===== Beam size 5, absolute pruning =====
+[2025-12-07 00:30:43] COMMAND: translate.py --cuda --input ./cz-en/data/test_small.cz --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model --checkpoint-path cz-en/checkpoints/checkpoint_best.pt --output cz-en/output_k5_absolute.txt --max-len 300 --beam-size 5
+[2025-12-07 00:30:43] Arguments: {'cuda': True, 'data': 'cz-en/data/prepared/', 'source_lang': 'cz', 'target_lang': 'en', 'src_tokenizer': 'cz-en/tokenizers/cz-bpe-8000.model', 'tgt_tokenizer': 'cz-en/tokenizers/en-bpe-8000.model', 'max_tokens': None, 'batch_size': 1, 'train_on_tiny': False, 'arch': 'transformer', 'max_epoch': 7, 'clip_norm': 4.0, 'lr': 0.0003, 'patience': 3, 'max_length': 300, 'log_file': 'cz-en/logs/train.log', 'save_dir': 'cz-en/checkpoints/', 'restore_file': 'checkpoint_last.pt', 'save_interval': 1, 'no_save': False, 'epoch_checkpoints': False, 'ignore_checkpoints': True, 'encoder_dropout': 0.1, 'decoder_dropout': 0.1, 'dim_embedding': 256, 'attention_heads': 4, 'dim_feedforward_encoder': 1024, 'dim_feedforward_decoder': 1024, 'max_seq_len': 300, 'n_encoder_layers': 3, 'n_decoder_layers': 3, 'encoder_embed_path': None, 'decoder_embed_path': None, 'seed': 42, 'input': './cz-en/data/test_small.cz', 'checkpoint_path': 'cz-en/checkpoints/checkpoint_best.pt', 'output': 'cz-en/output_k5_absolute.txt', 'max_len': 300, 'beam_size': 5, 'alpha': 0.7, 'bleu': False, 'reference': None}
+[2025-12-07 00:30:43] Loaded a model from checkpoint cz-en/checkpoints/checkpoint_best.pt
+PAD ID: 3, BOS ID: 1, EOS ID: 2
+          PAD token: "<pad>", BOS token: "<s>", EOS token: "</s>"
+0it [00:00, ?it/s]1it [00:00,  1.43it/s]2it [00:01,  1.04s/it]3it [00:02,  1.20it/s]4it [00:02,  1.48it/s]5it [00:03,  1.76it/s]6it [00:03,  1.74it/s]7it [00:04,  2.07it/s]8it [00:04,  2.32it/s]9it [00:05,  1.93it/s]10it [00:05,  1.97it/s]11it [00:06,  2.10it/s]12it [00:06,  2.05it/s]13it [00:07,  2.04it/s]14it [00:07,  2.25it/s]15it [00:07,  2.36it/s]16it [00:08,  2.50it/s]17it [00:08,  2.14it/s]18it [00:09,  1.54it/s]19it [00:11,  1.01it/s]20it [00:12,  1.25it/s]21it [00:12,  1.55it/s]22it [00:13,  1.48it/s]23it [00:13,  1.57it/s]24it [00:13,  1.97it/s]25it [00:14,  2.11it/s]26it [00:14,  2.30it/s]27it [00:14,  2.80it/s]28it [00:15,  2.87it/s]29it [00:15,  2.54it/s]30it [00:15,  2.84it/s]31it [00:16,  3.38it/s]32it [00:16,  3.40it/s]33it [00:16,  3.35it/s]34it [00:17,  1.74it/s]35it [00:20,  1.31s/it]36it [00:21,  1.09s/it]37it [00:21,  1.18it/s]38it [00:21,  1.53it/s]39it [00:22,  1.76it/s]40it [00:22,  2.01it/s]41it [00:22,  2.31it/s]42it [00:23,  2.68it/s]43it [00:23,  2.78it/s]44it [00:23,  2.91it/s]45it [00:24,  3.22it/s]46it [00:24,  3.13it/s]47it [00:24,  3.14it/s]48it [00:24,  3.72it/s]49it [00:25,  3.84it/s]50it [00:25,  3.85it/s]51it [00:25,  3.25it/s]52it [00:26,  3.41it/s]53it [00:26,  2.63it/s]54it [00:27,  2.33it/s]55it [00:27,  2.85it/s]56it [00:27,  2.74it/s]57it [00:27,  3.11it/s]58it [00:28,  3.12it/s]59it [00:28,  2.84it/s]60it [00:28,  3.25it/s]61it [00:29,  3.02it/s]62it [00:29,  2.81it/s]63it [00:29,  2.93it/s]64it [00:30,  3.45it/s]65it [00:30,  4.08it/s]66it [00:30,  3.19it/s]67it [00:31,  2.92it/s]68it [00:31,  2.85it/s]69it [00:32,  2.62it/s]70it [00:32,  2.10it/s]71it [00:33,  2.30it/s]72it [00:33,  2.29it/s]73it [00:33,  2.20it/s]74it [00:34,  2.44it/s]75it [00:34,  2.40it/s]76it [00:35,  1.74it/s]77it [00:35,  2.04it/s]78it [00:36,  2.35it/s]79it [00:36,  2.47it/s]80it [00:37,  2.30it/s]80it [00:37,  2.16it/s]
+[2025-12-07 00:31:20] Wrote 80 lines to cz-en/output_k5_absolute.txt
+[2025-12-07 00:31:20] Translation completed in 37.13 seconds
+translations: [', a harsh child from Kwangtung?', ', a child whose ancestors hung in the baskets above the gap in Sierras and pushed the dynamite into the whirl in rockets?', ', I just want you to turn into a flour on the wall.', '. Your ancestors are now turning in the graves.', ", you're pushing me too much.", ", I'm not a slave. I'm not a slave.", ', I ended up as a protector.', ', I ended up with shocking.', ", I'm sending the house less money. I'm sending a house less money.", ", I don't have anything to eat.", ", I'm  ⁇ asto bad.", ", if I die, I'm fucked.", ', my family will be fucked. My family will fuck my family.', "-there's anhydrous?", ', what do you mean? What do you mean?', ', however, none of the interested parties submitted an alternative.', 'review is based on the adjusted capacity data provided by the applicant and covering the entire Union industry.', 'data shall bear the references to publicly available data relating to, in particular, unused capacity and capacity of producers who stopped operating due to financial difficulties.', 'as explained above in section 6 ‘Macroeconomic indicators’, revised data provide a much more accurate set of data available on the capacity available for the production of biodiesel during the period considered than the data originally provided and published in the provisional Regulation.', ', everybody errors. Everyone errors each errors.', ", you know what it's?", '! For heavy sins you have a lot to get a lot. You have a lot of sins.', ', for light sins you can get little. You can see little.', '. Do you understand? Do you understand?', ', the man killed the boy, and I helped him.', ', I was happy. I was happy. I was happy.', ', forgive me.', '. You have to go to work! You have to go to work!', ', Geum-jao, what do those eye shadows mean?', ', you know, why those kids...', '! Hey! Hey!', ", here's another one here!", ", why don't you? Hello?", 'Communication from the Commission to the European Parliament, the Council, the European Economic and Social Committee and the Committee of the Regions: the Digital Agenda for Europe, COM(2010) 245 final, 28.8.2010.', 'Studium in Europe Erasmus and Leonardo da Vinci European Commission Home News Transport and Travel Energy and Natural Resources of the EU in the Bones Economic, Finance and Tax Culture, Education and Youth Enterprise Regions and local development Justice and civil rights Science and technology EU Employment and social rights Agriculture, fisheries and food Environment, consumer protection and health Studies and traineeships abroad?', ", Yo, you don't want to see the cellar, shit.", ', did it tell you?', '. Now get out.', ', the house is not for sale.The house is not for sale.', ', what was it like? So what was it like?', ', was it... experience?', '. Jo. Jo. Jo.', 'ly, it was an experience.', ', what is this smell?', '. Jo. Jo. Jo.', ', this is... secret Navy Flowers and...', ". Hey, is everything okay? It's all right?", '. No. No.', "wasn't even.", "wasn't exactly what he was.", ': Application of EU legislation Answer from the Council (3 November 2009)', ', it was just a test...', ', Samah stared at Xara with a dazzling prayer in his eyes.', ', it was all that. It was all. It was all.', 'test. The difficult test.', ', it should have taught you the humility and patience.', 'ing your aggressiveness..."', ', weakening us," Xar said quietly.', ', "Yes," Samah said, leaning slowly down his head.', ', weakened by you."', ', you were afraid of us."You were afraid of us."', ', we were afraid of you."We were afraid of you."', ', you were hoping to die..."', ', "No."', ', Samah shook his head.', 'ly, Labyrint became the embodiment of this hope.', ', there is nothing bigger or older than the universe.', ', I would like to speak about the following questions:', ', are we alone in the universe alone?', 'Article 46 EC and 55 EC do not preclude Articles 43 EC and 49 EC by limiting reasoned reasons for public health.', ", I'm saying what I heard.", ', even the other cops heard it. They heard the other cops.', ', that means that I will go to the Ko ⁇ a.', '-fucking shit.', ", this is for the fuckin' assignment.", ", I don't have to do with Freeeb what I'm helping you. And no one knows it, except the poles.", ', did they put it on me?', ', every person has someone.', ', do you want me to go?', "saying that I'm going to go, -till help."]
+
+real	0m40.273s
+user	1m12.539s
+sys	0m3.621s

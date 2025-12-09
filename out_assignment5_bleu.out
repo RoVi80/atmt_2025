@@ -1,0 +1,17 @@
+
+Filesystems usage for user josvil ( uid 646215573 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/josvil                    17GB   373GB     4.4%        51,881          
+/scratch/josvil                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh    34GB    10TB     0.3%         3,990          
+-------------------------------------------------------------------------------------
+
+!! Please note: the scratch filesystem is intended only for temporary storage.
+   Files in /scratch/josvil that have not been accessed in more than 30 days
+   may be automatically deleted.
+
+=== BLEU for k=1 (greedy) ===
+[2025-12-08T20:25:21.830] error: *** JOB 41157 ON u24-chiivm0-603 CANCELLED AT 2025-12-08T20:25:21 DUE to SIGNAL Terminated ***
